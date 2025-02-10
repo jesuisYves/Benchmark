@@ -4,6 +4,15 @@ const benchmark = require('./2-benchmark.js');
 
 // Define Data Source
 
+function AgeComputable() {}
+Object.defineProperty(AgeComputable.prototype, 'age', {
+  get() {
+    const difference = new Date() - this.birth;
+    return Math.floor(difference / 31536000000);
+  },
+  enumerable: true,
+});
+
 const data1 = [
   { name: 'Marcus Aurelius',
     birth: new Date('212-04-26'),
@@ -20,7 +29,7 @@ const data1 = [
   { name: 'Rene Descartes',
     birth: new Date('1596-03-31'),
     city: 'La Haye en Touraine' },
-];
+].map((person) => Object.setPrototypeOf(person, AgeComputable.prototype));
 
 const data2 = [
   ['Marcus Aurelius', '212-04-26', 'Rome'],
@@ -80,11 +89,11 @@ const query = (person) => (
 
 // Execute tests
 
+const filterObjects = () => data1.filter(query);
+
+const filterArrays = () => data2.filter(query);
+
 benchmark.do(1000000, [
-  function filterObjects() {
-    data1.filter(query);
-  },
-  function filterArrays() {
-    data2.filter(query);
-  }
+  filterObjects,
+  filterArrays
 ]);
