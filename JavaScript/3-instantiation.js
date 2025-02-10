@@ -6,7 +6,8 @@ const makeClosure = (hello, size, flag) => () => (
   { hello, size, flag }
 );
 
-const closureInstance = () => makeClosure('world', 100500, true);
+const closureInstance = makeClosure('world', 100500, true);
+const invokeClosure = () => closureInstance();
 
 const defineArray = () => ['world', 100500, true];
 
@@ -68,7 +69,7 @@ const callFactory = () => itemFactory('world', 100500, true);
 
 benchmark.do(1000000, [
   callFactory,
-  closureInstance,
+  invokeClosure,
   defineObject,
   defineArray,
   defineArrayOfString,
