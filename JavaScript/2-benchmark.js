@@ -35,7 +35,7 @@ const opt = fn => {
     if (n === 0) return;
     if (Math.pow(2, n) & optStatus) results.push(name);
   });
-  return results.length ? results.join(', ') : 'no preopt,';
+  return results.length ? results.join(', ') : 'no preopt';
 }
 
 const optimize = fn => %OptimizeFunctionOnNextCall(fn);
@@ -64,9 +64,8 @@ benchmark.do = (count, tests) => {
     const diff = end - begin;
     const name = rpad(fn.name, '.', 22);
     const iterations = result.length - PRE_COUNT;
-    const log = [
-      name, diff, optBefore, optAfter, optAfterHeat, optAfterLoop
-    ];
+    const opts = [optBefore, optAfter, optAfterHeat, optAfterLoop];
+    const log = [name, diff, opts.join(' -> ')];
     console.log(log.join(' '));
     return { name, time: diff };
   });
